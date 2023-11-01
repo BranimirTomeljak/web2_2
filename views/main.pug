@@ -1,0 +1,32 @@
+doctype html
+html
+  head
+    title Threat Test
+    link(rel="stylesheet", href="/stylesheets/style.css")
+  body
+    section#xss
+      h1 XSS Napad
+      b Upute: 
+      span Ovo je primjer ranjivosti u kojoj se korisnički unos ne provjerava i prikazuje se na stranici.
+      form(action='#')
+        span
+            label(for='xss-checkbox') Ranjivost uključena
+            input(type='checkbox', id='xss-checkbox', name='xss-checkbox')
+        label(for='name') votevr:
+        input(type='text', id='name', name='name')
+        input(type='submit', value='Submit')
+    section#sensitive
+      h1 Nesigurna pohrana osjetljivih podataka
+      b Upute: 
+      span Ovo je primjer ranjivosti u kojoj se osjetljivi podaci pohranjuju u bazu podataka bez ikakvog oblika enkripcije.
+      form(action='#')
+        span
+            label(for='sensitive-checkbox') Ranjivost uključena
+            input(type='checkbox', id='sensitive-checkbox', name='sensitive-checkbox') 
+        label(for='sensitive-name') Name:
+        input(type='text', id='sensitive-name', name='sensitive-name')
+        label(for='sensitive-email') Email:
+        input(type='email', id='sensitive-email', name='sensitive-email')
+        label(for='sensitive-password') Password:
+        input(type='password', id='sensitive-password', name='sensitive-password')
+        input(type='submit', value='Submit')
