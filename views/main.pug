@@ -5,22 +5,28 @@ html
     link(rel="stylesheet", href="/stylesheets/style.css")
   body
     section#xss
-      h1 XSS napad (pohranjeni)
+      h1 XSS napad (reflektirani)
       b Upute: 
-      span Ovo je primjer ranjivosti u kojoj se korisnički unos ne provjerava i prikazuje se na stranici.
+      span Ovo je primjer ranjivosti koji omogućuje slanje podataka napadača u preglednik korisnika kako bih mogao dobiti korisničke podatke kao što su session ID, zaporke, itd. Konkretno, reflektirani XSS napad se izvršava phishingom i slanjem linka žrtvi. Kada žrtva klikne na URI, XSS payload se izvršava i šalje podatke napadaču. U ovom slučaju, payload je skripta koja šalje cookie napadaču. Nakon slanja zahtjeva za registraciju na nekoj simuliranoj web stranici, šalje se mail za potvrdu registracije (također simuliran) u kojem se nalazi maliciozni URI. Kada koristnik klikne na link, XSS payload se izvršava i šalje cookie napadaču.
       form(onsubmit="xss(); return false;")
         span
           label(for='xss-checkbox') Ranjivost uključena
           input(type='checkbox', id='xss-checkbox', name='xss-checkbox')
-        label(for='name') votevr:
-        input(type='text', id='name', name='name')
+        label(for='xss-name') Name:
+        input(type='text', id='xss-name', name='xss-name', required)
+        label(for='xss-email') Email:
+        input(type='email', id='xss-email', name='xss-email', required)
+        label(for='xss-phonenumber') Phone number:
+        input(type='number', id='xss-phonenumber', name='xss-phonenumber', required, style='appearance: textfield;')
+        label(for='xss-password') Password:
+        input(type='password', id='xss-password', name='xss-password', required, placeholder='Minimalno 8 znakova', minlength='8', )
         input(type='submit', value='Submit')
-        p(id='response-message-xss') 
+        p(id='response-message-xss')
 
     section#sensitive
       h1 Nesigurna pohrana osjetljivih podataka
       b Upute: 
-      span Ovo je primjer ranjivosti u kojoj se osjetljivi podaci pohranjuju u bazu podataka bez ikakvog oblika enkripcije. Simuliramo prijavu na neku web aplikaciju u kojoj moramo ostaviti svoje podatke, uključujući privatni e-mail, broj mobitela i zaporku koji se mogu zloupotrijebiti. Nakon slanja zahtjeva, prikazati će se uneseni korisnik kako je zapisan u bazi podataka.
+      span Ovo je primjer ranjivosti u kojem se osjetljivi podaci pohranjuju u bazu podataka bez ikakvog oblika enkripcije. Simuliramo prijavu na neku web aplikaciju u kojoj moramo ostaviti svoje podatke, uključujući privatni e-mail, broj mobitela i zaporku koji se mogu zloupotrijebiti. Nakon slanja zahtjeva, prikazati će se uneseni korisnik kako je zapisan u bazi podataka.
       form(onsubmit="sensitive(); return false;")
         span
           label(for='sensitive-checkbox') Ranjivost uključena
@@ -40,7 +46,23 @@ html
 script.
   function xss() {
     const checkbox = document.getElementById("xss-checkbox");
-    const name = document.getElementById("name");
+    const name = document.getElementById("xss-name");
+    const email = document.getElementById("xss-email");
+    const phonenumber = document.getElementById("xss-phonenumber");
+    const password = document.getElementById("xss-password");
+
+    if(checkbox.checked) {
+      window.open('mail.html', '_blank');
+      checkbox.checked = false;
+      name.value = "";
+      email.value = "";
+      phonenumber.value = "";
+      password.value = "";
+    }
+    else{
+      //sanitizacija linka
+    }
+    
 
     fetch(`/submit/xss`, {
       method: "POST",
@@ -54,7 +76,7 @@ script.
         return response.json();
       })
       .then((data) => {
-        //nesto nesto
+        
         checkbox.checked = false;
         name.value = "";
       })
