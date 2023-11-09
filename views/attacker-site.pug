@@ -1,8 +1,9 @@
 doctype html
 html
   head
-    title Attacker Site
+    title Napadačeva stranica
+    link(rel="stylesheet", href="/stylesheets/style.css")
   body
-    h1 Attacker Site
-    p Received the following cookie: #{cookie}
-    p Return to the <a href="/">main page</a>
+    h1 Napadačeva stranica
+    p Primljen žrtvin cookie: #{cookie}
+    button(onclick="window.location.href='/'") Početna stranica

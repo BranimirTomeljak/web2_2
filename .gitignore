@@ -127,10 +127,4 @@ dist
 .pnp.*
 
 #my files
-FolderTraversalApp.java
-FolderTraversalApp.class
-allFiles.txt
-
 .env
-
-database.sql

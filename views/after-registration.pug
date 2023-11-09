@@ -1,0 +1,13 @@
+doctype html
+html
+  head
+    title Secure Registration
+    link(rel="stylesheet", href="/stylesheets/style.css")
+  body
+    h1 Secure Registration
+    p Thank you for securely registering with our service. 
+    button(onclick="window.location.href='/'") Početna stranica
+    br
+    br
+    p Recieved sanitized input: #{input}
+    | !{input}

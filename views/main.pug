@@ -4,25 +4,6 @@ html
     title Threat Test
     link(rel="stylesheet", href="/stylesheets/style.css")
   body
-    section#xss
-      h1 XSS napad (reflektirani)
-      b Upute: 
-      span Ovo je primjer ranjivosti koji omogućuje slanje podataka napadača u preglednik korisnika kako bih mogao dobiti korisničke podatke kao što su session ID, zaporke, itd. Konkretno, reflektirani XSS napad se izvršava phishingom i slanjem linka žrtvi. Kada žrtva klikne na URI, XSS payload se izvršava i šalje podatke napadaču. U ovom slučaju, payload je skripta koja šalje cookie napadaču. Nakon slanja zahtjeva za registraciju na nekoj simuliranoj web stranici, šalje se mail za potvrdu registracije (također simuliran) u kojem se nalazi maliciozni URI. Kada koristnik klikne na link, XSS payload se izvršava i šalje cookie napadaču.
-      form(onsubmit="xss(); return false;")
-        span
-          label(for='xss-checkbox') Ranjivost uključena
-          input(type='checkbox', id='xss-checkbox', name='xss-checkbox')
-        label(for='xss-name') Name:
-        input(type='text', id='xss-name', name='xss-name', required)
-        label(for='xss-email') Email:
-        input(type='email', id='xss-email', name='xss-email', required)
-        label(for='xss-phonenumber') Phone number:
-        input(type='number', id='xss-phonenumber', name='xss-phonenumber', required, style='appearance: textfield;')
-        label(for='xss-password') Password:
-        input(type='password', id='xss-password', name='xss-password', required, placeholder='Minimalno 8 znakova', minlength='8', )
-        input(type='submit', value='Submit')
-        p(id='response-message-xss')
-
     section#sensitive
       h1 Nesigurna pohrana osjetljivih podataka
       b Upute: 
@@ -31,60 +12,38 @@ html
         span
           label(for='sensitive-checkbox') Ranjivost uključena
           input(type='checkbox', id='sensitive-checkbox', name='sensitive-checkbox') 
-        label(for='sensitive-name') Name:
+        label(for='sensitive-name') Ime:
         input(type='text', id='sensitive-name', name='sensitive-name', required)
         label(for='sensitive-email') Email:
         input(type='email', id='sensitive-email', name='sensitive-email', required)
-        label(for='sensitive-phonenumber') Phone number:
+        label(for='sensitive-phonenumber') Broj mobitela:
         input(type='number', id='sensitive-phonenumber', name='sensitive-phonenumber', required, style='appearance: textfield;')
-        label(for='sensitive-password') Password:
+        label(for='sensitive-password') Zaporka:
         input(type='password', id='sensitive-password', name='sensitive-password', required, placeholder='Minimalno 8 znakova', minlength='8', )
-        input(type='submit', value='Submit')
+        input(type='submit', value='Registriraj')
         p(id='response-message-sensitive')
         table(id='response-table-sensitive')
 
+    section#xss
+      h1 XSS napad (reflektirani)
+      b Upute: 
+      span Ovo je primjer ranjivosti koji omogućuje slanje podataka napadača u preglednik korisnika kako bih mogao dobiti korisničke podatke kao što su session ID, zaporke, itd. Konkretno, reflektirani XSS napad se izvršava phishingom i slanjem linka žrtvi. Kada žrtva klikne na URI, XSS payload se izvršava i šalje podatke napadaču. U ovom slučaju, payload je skripta koja šalje cookie napadaču. Nakon slanja zahtjeva za registraciju na nekoj simuliranoj web stranici, šalje se mail za potvrdu registracije (također simuliran) u kojem se nalazi maliciozni URI. Kada koristnik klikne na link, XSS payload se izvršava i šalje cookie napadaču, a korisniku se učita normalna stranica i nije svjestan da je napadač upravo doznao njegov Session ID.
+      form(onsubmit="xss(); return false;")
+        span
+          label(for='xss-checkbox') Ranjivost uključena
+          input(type='checkbox', id='xss-checkbox', name='xss-checkbox')
+        label(for='xss-name') Ime:
+        input(type='text', id='xss-name', name='xss-name', required)
+        label(for='xss-email') Email:
+        input(type='email', id='xss-email', name='xss-email', required)
+        label(for='xss-phonenumber') Broj mobitela:
+        input(type='number', id='xss-phonenumber', name='xss-phonenumber', required, style='appearance: textfield;')
+        label(for='xss-password') Zaporka:
+        input(type='password', id='xss-password', name='xss-password', required, placeholder='Minimalno 8 znakova', minlength='8', )
+        input(type='submit', value='Registriraj')
+        p(id='response-message-xss')
+
 script.
-  function xss() {
-    const checkbox = document.getElementById("xss-checkbox");
-    const name = document.getElementById("xss-name");
-    const email = document.getElementById("xss-email");
-    const phonenumber = document.getElementById("xss-phonenumber");
-    const password = document.getElementById("xss-password");
-
-    if(checkbox.checked) {
-      window.open('mail.html', '_blank');
-      checkbox.checked = false;
-      name.value = "";
-      email.value = "";
-      phonenumber.value = "";
-      password.value = "";
-    }
-    else{
-      //sanitizacija linka
-    }
-    
-
-    fetch(`/submit/xss`, {
-      method: "POST",
-      body: JSON.stringify({
-        checkbox: checkbox.checked,
-        name: name.value,
-      }),
-      headers: { "Content-type": "application/json" },
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        
-        checkbox.checked = false;
-        name.value = "";
-      })
-      .catch((error) => {
-        console.log("There was an error: ", error);
-      });
-  }
-
   function sensitive() {
     const checkbox = document.getElementById("sensitive-checkbox");
     const name = document.getElementById("sensitive-name");
@@ -99,7 +58,7 @@ script.
         name: name.value,
         email: email.value,
         phonenumber: phonenumber.value,
-        password: password.value,
+        password: password.value
       }),
       headers: { "Content-type": "application/json" },
     })
@@ -150,4 +109,14 @@ script.
       .catch((error) => {
         console.log("There was an error: ", error);
       });
+  }
+
+  function xss() {
+    const checkbox = document.getElementById("xss-checkbox");
+    const name = document.getElementById("xss-name");
+    const email = document.getElementById("xss-email");
+    const phonenumber = document.getElementById("xss-phonenumber");
+    const password = document.getElementById("xss-password");
+
+    window.location.href = `/send-mail?checkbox=${checkbox.checked}`;
   }

