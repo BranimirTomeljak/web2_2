@@ -34,6 +34,7 @@ router.post("/submit/sensitive", async function (req, res) {
 
 router.get("/send-mail", (req, res) => {
   const checkbox = req.query.checkbox;
+  res.cookie("SessionID", "ovoJeSessionIDkojiNapadacMozeUkrasti", {sameSite: "none"});
   res.render("mail-register-confirm", {checkbox})
 });
 

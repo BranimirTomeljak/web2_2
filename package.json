@@ -7,7 +7,8 @@
     "dev": "nodemon .",
     "start": "node index.js",
     "build": "npm install",
-    "seed": "node db/seed.js"
+    "seed": "node db/seed.js",
+    "labos": "npm install && node index.js"
   },
   "author": "",
   "license": "ISC",

@@ -1,8 +1,8 @@
 const db = require("./db");
 
-const drop_tables = `DROP TABLE users;`;
+const drop_table = `DROP TABLE users;`;
 
-const sql_create_users = `CREATE TABLE users (
+const create_users = `CREATE TABLE users (
     id int  GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name text NOT NULL,
     mail text NOT NULL,
@@ -11,7 +11,7 @@ const sql_create_users = `CREATE TABLE users (
 )`;
 
 (async () => {
-  await db.query(drop_tables, []);
-  await db.query(sql_create_users, []);
+  await db.query(drop_table, []);
+  await db.query(create_users, []);
   process.exit(0);
 })();
